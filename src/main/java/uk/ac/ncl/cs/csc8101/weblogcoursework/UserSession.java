@@ -17,6 +17,7 @@ import java.util.Random;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.zip.GZIPInputStream;
 
 import com.datastax.driver.core.BatchStatement;
 import com.datastax.driver.core.BoundStatement;
@@ -41,8 +42,8 @@ public class UserSession {
 	private static Cluster cluster;
 	private static Session session;
 	//private static final File dataDir = new File("D:/temp/");
-	private static final File dataDir = new File("../../");
-	private static final File logFile = new File(dataDir, "loglite");
+	private static final File dataDir = new File("/home/ubuntu/data/cassandra-test-dataset");
+	private static final File logFile = new File(dataDir, "CSC8101-logfile.gz");
 	private static InputStreamReader inputStreamReader;
 	private static BufferedReader bufferedReader;
 	private static DateFormat dateFormat;
@@ -79,9 +80,13 @@ public class UserSession {
 		FileInputStream fileInputStream;
 		try {
 			fileInputStream = new FileInputStream(logFile);
-			inputStreamReader = new InputStreamReader(fileInputStream);
+			final GZIPInputStream gzipInputStream = new GZIPInputStream(fileInputStream);
+			inputStreamReader = new InputStreamReader(gzipInputStream);
 			bufferedReader = new BufferedReader(inputStreamReader);
 		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
